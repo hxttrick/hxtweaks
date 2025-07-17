@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "dev.hxttrick.hxtweaks.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "AccessibilityOptionsScreenMixin",
+    "InGameHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
