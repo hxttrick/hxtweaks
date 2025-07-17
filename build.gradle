@@ -28,7 +28,7 @@ loom {
 		}
 	}
 
-	accessWidenerPath = file("src/client/resources/access/ingamehudbartype.accesswidener")
+	accessWidenerPath = file("src/client/resources/hxtweaks.accesswidener")
 
 }
 

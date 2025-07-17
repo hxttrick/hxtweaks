@@ -1,0 +1,5 @@
+accessWidener v1 named
+
+accessible class net/minecraft/client/gui/hud/InGameHud$BarType
+
+accessible method net/minecraft/client/option/GameOptions update (Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/nbt/NbtCompound;
