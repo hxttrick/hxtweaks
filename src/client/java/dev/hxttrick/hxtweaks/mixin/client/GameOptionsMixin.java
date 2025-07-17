@@ -34,7 +34,6 @@ public class GameOptionsMixin {
 
     @Inject(method = "write", at = @At("TAIL"))
     private void onWrite(CallbackInfo ci) {
-        LOGGER.info("=== options.txt saved! ===");
         boolean val = HxTweaksClient.getShowLocatorBar().getValue();
         try {
             Files.write(
