@@ -5,7 +5,8 @@
   "client": [
     "AccessibilityOptionsScreenMixin",
     "GameOptionsMixin",
-    "InGameHudMixin"
+    "InGameHudMixin",
+    "ClientPlayerEntityInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
