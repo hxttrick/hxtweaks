@@ -41,10 +41,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// Mod Menu. Compile with it but don't bundle it in JAR.
-	def modmenu = "com.terraformersmc:modmenu:${project.modmenu_version}"
-	compileOnly modmenu
-	modClientRuntimeOnly modmenu
+	// Mod Menu.
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	
 }
 

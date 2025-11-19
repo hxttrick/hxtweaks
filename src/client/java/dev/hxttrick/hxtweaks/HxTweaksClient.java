@@ -1,6 +1,7 @@
 package dev.hxttrick.hxtweaks;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.option.SimpleOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class HxTweaksClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		LOGGER.info("HxTweaks initialized.");
+        HxTweaksConfig.init(FabricLoader.getInstance().getConfigDir().toFile());
 	}
 
 	public static SimpleOption<Boolean> getShowLocatorBar() {

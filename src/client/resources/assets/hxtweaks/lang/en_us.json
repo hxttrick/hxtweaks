@@ -1,3 +1,6 @@
 {
-  "options.showLocatorBar": "Show Locator Bar"
+  "options.showLocatorBar": "Show Locator Bar",
+  "hx.config.showLocatorBar": "Show Locator Bar",
+  "hx.config.boatSnapping": "Boat Snapping: %s",
+  "hx.config.title": "HxTweaks Config"
 }

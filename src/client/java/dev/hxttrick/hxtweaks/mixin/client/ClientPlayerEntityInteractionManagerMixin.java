@@ -1,5 +1,7 @@
 package dev.hxttrick.hxtweaks.mixin.client;
 
+import dev.hxttrick.hxtweaks.HxTweaksClient;
+import dev.hxttrick.hxtweaks.HxTweaksConfig;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BoatItem;
@@ -22,11 +24,14 @@ public class ClientPlayerEntityInteractionManagerMixin {
 
     @Inject(method = "interactItem", at = @At("HEAD"))
     private void beforeInteractItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+        double boatSnapping = HxTweaksConfig.INSTANCE.boatSnapping;
+        HxTweaksClient.LOGGER.info(String.valueOf(boatSnapping));
+        if (boatSnapping == 0) return;
 
         ItemStack stack = player.getStackInHand(hand);
         if (!(stack.getItem() instanceof BoatItem)) return;
 
-        Float snapped = getSnappedYaw(player.getYaw());
+        Float snapped = getSnappedYaw(player.getYaw(), (float) boatSnapping);
         if (snapped == null) return;
 
         isSpoofing = true;
@@ -51,11 +56,10 @@ public class ClientPlayerEntityInteractionManagerMixin {
     }
 
     @Unique
-    private Float getSnappedYaw(float yaw) {
+    private Float getSnappedYaw(float yaw, float threshold) {
         yaw = MathHelper.wrapDegrees(yaw);
 
         float[] cardinals = { 0f, 90f, 180f, -90f };
-        float threshold = 2.0f; // degrees
 
         Float bestCardinal = null;
         float bestDiff = threshold + 1e-4f;

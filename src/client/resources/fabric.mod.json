@@ -16,7 +16,7 @@
 	"environment": "client",
 	"entrypoints": {
 		"client": [ "dev.hxttrick.hxtweaks.HxTweaksClient" ],
-		"modmenu": []
+		"modmenu": [ "dev.hxttrick.hxtweaks.ModMenuImpl" ]
 	},
 	"mixins": [
 		"hxtweaks.client.mixins.json"
