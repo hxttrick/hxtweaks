@@ -25,7 +25,6 @@ public class ClientPlayerEntityInteractionManagerMixin {
     @Inject(method = "interactItem", at = @At("HEAD"))
     private void beforeInteractItem(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
         double boatSnapping = HxTweaksConfig.INSTANCE.boatSnapping;
-        HxTweaksClient.LOGGER.info(String.valueOf(boatSnapping));
         if (boatSnapping == 0) return;
 
         ItemStack stack = player.getStackInHand(hand);
@@ -38,12 +37,8 @@ public class ClientPlayerEntityInteractionManagerMixin {
         savedYaw = player.getYaw();
         savedHeadYaw = player.getHeadYaw();
 
-        //HxTweaksClient.LOGGER.info("Spoofing yaw to " + snapped);
-
         player.setYaw(snapped);
         player.setHeadYaw(snapped);
-
-        //HxTweaksClient.LOGGER.info("Current yaw (player, head): " + player.getYaw() + ", " + player.getHeadYaw());
     }
 
     @Inject(method = "interactItem", at = @At("TAIL"))
