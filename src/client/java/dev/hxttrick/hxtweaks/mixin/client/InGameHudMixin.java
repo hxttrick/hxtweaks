@@ -1,27 +1,27 @@
 package dev.hxttrick.hxtweaks.mixin.client;
 
+import dev.hxttrick.hxtweaks.HxPeripherals;
 import dev.hxttrick.hxtweaks.HxTweaksClient;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud.BarType;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin {
+public abstract class InGameHudMixin {
+
+    /** Locator bar **/
 
     // Should always show experience bar over locator bar
     @Inject(at = @At("RETURN"), method = "shouldShowExperienceBar", cancellable = true)
@@ -47,36 +47,26 @@ public class InGameHudMixin {
     }
 
 
-    @Shadow @Final private MinecraftClient client;
 
-    private static final Identifier EFFECT_BACKGROUND_TEXTURE = Identifier.ofVanilla("hud/effect_background");
-    private static final ItemStack CLOCK_ITEM_STACK = new ItemStack(Items.CLOCK);
+    /** Peripherals **/
 
-    @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"))
-    private void drawClockAsEffect(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        if (!shouldDrawClockEffect()) return;
+    @Shadow protected abstract void renderHotbarItem(DrawContext context, int x, int y, RenderTickCounter tickCounter, PlayerEntity player, ItemStack stack, int seed);
 
-        //---------- config ----------//
-        int effectBackgroundSize = 24;
-        int effectItemSize = 16;
-        int marginX = 1;
-        int marginY = 1;
-        //----------------------------//
+    @Inject(method = "renderHotbar", at = @At("HEAD"))
+    private void renderPeripherals(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
 
-        int x = context.getScaledWindowWidth() - (effectBackgroundSize + marginX);
-        int y = client.isDemo() ? 15 + marginY : marginY;
+        if (!(MinecraftClient.getInstance().getCameraEntity() instanceof ClientPlayerEntity player)) return;
 
-        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, EFFECT_BACKGROUND_TEXTURE, x, y, effectBackgroundSize, effectBackgroundSize);
-        int itemOffset = (effectBackgroundSize - effectItemSize) / 2;
-        context.drawItem(CLOCK_ITEM_STACK, x + itemOffset, y + itemOffset);
-    }
-
-    @ModifyVariable(method = "renderStatusEffectOverlay", at = @At("STORE"), ordinal = 0) // beneficial effects counter
-    private int offsetBeneficialEffects(int original) {
-        return shouldDrawClockEffect() ? Math.min(1, original + 1) : original;
-    }
-
-    private boolean shouldDrawClockEffect() {
-        return client.player != null && client.player.getInventory().contains(CLOCK_ITEM_STACK);
+        HxPeripherals.renderPeripherals(context, player, slot -> {
+            renderHotbarItem(
+                    context,
+                    slot.x + slot.itemOffsetX,
+                    slot.y + slot.itemOffsetY,
+                    tickCounter,
+                    player,
+                    slot.peripheral,
+                    0
+            );
+        });
     }
 }

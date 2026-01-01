@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "hxtweaks:hud/peripheral_slots"
+    }
+  ]
+}
